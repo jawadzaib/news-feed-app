@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: news-app-nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - ./api:/var/www/html
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - news-app-network
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: news-app-laravel
+    volumes:
+      - ./api:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - news-app-network
+
+  db:
+    image: mysql:8.0
+    container_name: news-app-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - news-app-network
+
+networks:
+  news-app-network:
+    driver: bridge
+
+volumes:
+  db_data:
