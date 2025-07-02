@@ -1,9 +1,14 @@
 <?php
 
+use App\Console\Commands\ScrapeNewsCommand;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,4 +24,12 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    ->withCommands([
+        ScrapeNewsCommand::class,
+    ])
+    ->withSchedule(function (Schedule $schedule): void {
+        // Schedule the news:scrape command to run daily at 3:00 AM
+        $schedule->command(ScrapeNewsCommand::class)->dailyAt('03:00');
+    })
+    ->create();
