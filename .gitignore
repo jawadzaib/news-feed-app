@@ -15,6 +15,14 @@
 !/docker/nginx/nginx.conf # Keep Nginx config
 .env # The root .env file for docker-compose
 
+/frontend/node_modules/
+/frontend/build/
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+/frontend/.vscode/
+
 .DS_Store
 .env.*.local
 .history/
@@ -24,7 +32,7 @@ yarn-error.log*
 .pnpm-debug.log*
 .pnpm-store/
 .idea/
-.vscode/
+/.vscode/settings.json
 *.sublime-project
 *.sublime-workspace
 .project

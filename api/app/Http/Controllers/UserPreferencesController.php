@@ -95,8 +95,8 @@ class UserPreferencesController extends Controller
             $defaultCacheKey = 'user_feed_' . $user->id . '_default_' . md5(json_encode($request->all()));
             $articles = Cache::remember($defaultCacheKey, 60 * 60, function () use ($request) {
                 return Article::with(['source', 'category'])
-                               ->orderBy('published_at', 'desc')
-                               ->paginate($request->input('per_page', 15));
+                    ->orderBy('published_at', 'desc')
+                    ->paginate($request->input('per_page', 15));
             });
             return response()->json([
                 'message' => 'No preferences set, returning general feed.',
