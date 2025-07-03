@@ -23,6 +23,7 @@ services:
       - ./api:/var/www/html
     depends_on:
       - db
+      - redis
     networks:
       - news-app-network
 
@@ -36,11 +37,33 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
-      - ./docker/db/init-test-db.sh:/docker-entrypoint-initdb.d/init-test-db.sh # This line was added
+      - ./docker/db/init-test-db.sh:/docker-entrypoint-initdb.d/init-test-db.sh
     ports:
       - "3306:3306"
     networks:
       - news-app-network
+
+  redis:
+    image: redis:alpine
+    container_name: news-app-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - news-app-network
+
+  worker: # New Queue Worker service
+    build:
+      context: . # Build context is the root directory, same as 'app'
+      dockerfile: docker/app/Dockerfile # Uses the same Dockerfile as 'app'
+    container_name: news-app-worker
+    volumes:
+      - ./api:/var/www/html # Mount the Laravel code
+    depends_on:
+      - app
+      - redis
+    networks:
+      - news-app-network
+    command: php artisan queue:work # Command to run the queue worker
 
   frontend:
     build:

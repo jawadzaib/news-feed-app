@@ -27,8 +27,9 @@ const RegisterForm: React.FC = () => {
         password,
         password_confirmation: passwordConfirmation,
       };
-      const response = await authApi.register(payload); // Use authApi.register
+      const response = await authApi.register(payload);
       login(response.data.token, response.data.user);
+      navigate("/");
     } catch (err: any) {
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);

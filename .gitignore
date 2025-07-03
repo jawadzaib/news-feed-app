@@ -10,9 +10,6 @@
 /api/.idea/
 /api/.vscode/
 
-/docker/
-!/docker/app/Dockerfile # Keep Dockerfile for app
-!/docker/nginx/nginx.conf # Keep Nginx config
 .env # The root .env file for docker-compose
 
 /frontend/node_modules/

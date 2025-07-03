@@ -75,7 +75,15 @@ This will create the necessary tables in your `news_app_db` database.
 docker-compose exec app php artisan migrate
 ```
 
-### 6. Setup Frontend
+### 7. Restart docker services
+
+After migrating `cache` tables, restart docker container to keep worker service running
+
+```bash
+docker-compose up -d
+```
+
+### 8. Setup Frontend
 
 Navigate into your frontend directory `(news-app/frontend)`.
 install all Node.js dependencies.
@@ -133,12 +141,20 @@ After adding keys, clear Laravel config cache:
 docker-compose exec app php artisan config:clear
 ```
 
-### 3. Run the Scraper Manually
+### 3. Dispatch the scrap articles job
 
-You can manually trigger the scraping process at any time:
+You can trigger the job to scrap articles from 3 sources with this command:
 
 ```bash
 docker-compose exec app php artisan news:scrape
+```
+
+The `worker` service in docker-compose.yml is already configured to run `php artisan queue:work` automatically when you run docker-compose up -d
+
+you can monitor the logs:
+
+```bash
+docker-compose logs worker
 ```
 
 ### 4. Scheduled Scraping
