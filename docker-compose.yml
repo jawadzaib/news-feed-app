@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   nginx:
@@ -40,6 +40,21 @@ services:
       - "3306:3306"
     networks:
       - news-app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: news-app-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - news-app-network
+    depends_on:
+      - nginx
 
 networks:
   news-app-network:
