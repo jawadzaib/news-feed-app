@@ -20,7 +20,7 @@ const LoginForm: React.FC = () => {
 
     try {
       const payload: LoginPayload = { email, password };
-      const response = await authApi.login(payload); // Use authApi.login
+      const response = await authApi.login(payload);
       login(response.data.token, response.data.user);
       navigate("/");
     } catch (err: any) {

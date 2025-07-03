@@ -1,10 +1,13 @@
 /** @type {import('tailwindcss').Config} */
+import forms from "@tailwindcss/forms";
+import typography from "@tailwindcss/typography";
+
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {},
   },
-  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
+  plugins: [forms, typography],
   experimental: {
     extendedColors: true,
   },
