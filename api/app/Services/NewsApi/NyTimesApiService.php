@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class NyTimesApiService implements NewsApiService
 {
-    protected string $apiKey;
+    protected ?string $apiKey;
     protected string $baseUrl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json';
 
     public function __construct()
@@ -93,12 +93,11 @@ class NyTimesApiService implements NewsApiService
 
                 $processedArticles[] = $article;
             }
-            
-            return $processedArticles;
 
+            return $processedArticles;
         } catch (\Exception $e) {
             Log::error('Error fetching from New York Times API: ' . $e->getMessage(), ['exception' => $e]);
-            return [];
+            throw $e;
         }
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class NewsApiOrgService implements NewsApiService
 {
-    protected string $apiKey;
+    protected ?string $apiKey;
     protected string $baseUrl = 'https://newsapi.org/v2/';
 
     public function __construct()
@@ -83,11 +83,9 @@ class NewsApiOrgService implements NewsApiService
             }
 
             return $processedArticles;
-
         } catch (\Exception $e) {
             Log::error('Error fetching from NewsAPI.org: ' . $e->getMessage(), ['exception' => $e]);
-            return [];
+            throw $e;
         }
     }
 }
-

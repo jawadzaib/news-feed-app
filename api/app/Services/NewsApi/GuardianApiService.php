@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class GuardianApiService implements NewsApiService
 {
-    protected string $apiKey;
+    protected ?string $apiKey;
     protected string $baseUrl = 'https://content.guardianapis.com/';
 
     public function __construct()
@@ -82,10 +82,9 @@ class GuardianApiService implements NewsApiService
             }
 
             return $processedArticles;
-
         } catch (\Exception $e) {
             Log::error('Error fetching from The Guardian API: ' . $e->getMessage(), ['exception' => $e]);
-            return [];
+            throw $e;
         }
     }
 }

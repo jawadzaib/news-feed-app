@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Cache; // Import the Cache facade
+use Illuminate\Support\Facades\Cache;
 
 class ArticlesController extends Controller
 {
@@ -20,7 +20,7 @@ class ArticlesController extends Controller
         // Generate a unique cache key based on all request parameters
         $cacheKey = 'articles_search_' . md5(json_encode($request->all()));
 
-        // Try to retrieve from cache first. If not found, execute the query and store for 60 minutes.
+        // Try to retrieve from cache first
         $articles = Cache::remember($cacheKey, 60 * 60, function () use ($request) {
             $query = Article::with(['source', 'category']);
 

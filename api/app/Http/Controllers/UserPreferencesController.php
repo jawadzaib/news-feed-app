@@ -25,12 +25,9 @@ class UserPreferencesController extends Controller
 
         if (!$preferences) {
             return response()->json([
-                'message' => 'No preferences set for this user.',
-                'preferences' => (object)[
-                    'preferred_sources' => [],
-                    'preferred_categories' => [],
-                    'preferred_authors' => [],
-                ]
+                'preferred_sources' => [],
+                'preferred_categories' => [],
+                'preferred_authors' => [],
             ], 200);
         }
 
@@ -94,7 +91,7 @@ class UserPreferencesController extends Controller
             // Use a different cache key for the default feed
             $defaultCacheKey = 'user_feed_' . $user->id . '_default_' . md5(json_encode($request->all()));
             $articles = Cache::remember($defaultCacheKey, 60 * 60, function () use ($request) {
-                Article::with(['source', 'category'])
+                return Article::with(['source', 'category'])
                     ->orderBy('published_at', 'desc')
                     ->paginate($request->input('per_page', 15));
             });
