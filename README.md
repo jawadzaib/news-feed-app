@@ -31,7 +31,7 @@ Follow these steps to get the application up and running for the first time.
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repository-url> news-app
+git clone https://github.com/jawadzaib/news-feed-app news-app
 cd news-app
 ```
 
@@ -98,12 +98,14 @@ npm install
 ### Accessing the Backend API
 
 Your Laravel backend will be available at:
-`http://localhost:8000`
+
+- http://localhost:8000
 
 ### Accessing the Frontend
 
 Your React frontend development server will be available at:
-`http://localhost:3000`
+
+- http://localhost:3000
 
 To start the React development server (if not already running from docker-compose up -d):
 
