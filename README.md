@@ -143,11 +143,24 @@ docker-compose exec app php artisan config:clear
 
 ### 3. Dispatch the scrap articles job
 
-You can trigger the job to scrap articles from 3 sources with this command:
+- #### Manual trigger
 
-```bash
-docker-compose exec app php artisan news:scrape
-```
+  You can trigger the job to scrap articles from 3 sources (NewsAPI, Guardian and NY Times) with this command:
+
+  ```bash
+  docker-compose exec app php artisan news:scrape
+  ```
+
+- #### Scheduled trigger
+
+  The `news:scrape` command is scheduled to run daily at 3:00 AM UTC. For the Laravel scheduler to run in a Docker environment, you typically set up a cron job on your host that executes the `schedule:run` command inside the `app` container.
+  For development, you can manually run the scheduler to test:
+
+  ```bash
+  docker-compose exec app php artisan schedule:run
+  ```
+
+### 4. Monitor Logs
 
 The `worker` service in docker-compose.yml is already configured to run `php artisan queue:work` automatically when you run docker-compose up -d
 
@@ -157,13 +170,12 @@ you can monitor the logs:
 docker-compose logs worker
 ```
 
-### 4. Scheduled Scraping
+### 5. Clear cache
 
-The `news:scrape` command is scheduled to run daily at 3:00 AM UTC. For the Laravel scheduler to run in a Docker environment, you typically set up a cron job on your host that executes the `schedule:run` command inside the `app` container.
-For development, you can manually run the scheduler to test:
+Once scrapping job is finished, cache can be cleared to see results on frontend:
 
 ```bash
-docker-compose exec app php artisan schedule:run
+docker compose exec app php artisan optimize:clear
 ```
 
 ## Testing

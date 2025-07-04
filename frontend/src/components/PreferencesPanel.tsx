@@ -152,6 +152,7 @@ const PreferencesPanel: React.FC<PreferencesPanelProps> = ({
         <div
           className="absolute inset-0 bg-gray-900/80"
           onClick={onClose}
+          data-testid="overlay"
         ></div>
       )}
 

@@ -51,7 +51,7 @@ api.interceptors.request.use(
     if (config.method && ['post', 'put', 'patch', 'delete'].includes(config.method.toLowerCase())) {
       const csrfToken = getCsrfToken();
       if (csrfToken) {
-        config.headers.set('X-XSRF-TOKEN', csrfToken);
+        config.headers['X-XSRF-TOKEN'] = csrfToken;
       }
     }
 

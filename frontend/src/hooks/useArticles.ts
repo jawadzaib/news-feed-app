@@ -55,8 +55,6 @@ const useArticles = (options?: UseArticlesOptions) => {
         ? await newsApi.getPersonalizedFeed(params)
         : await newsApi.getArticles(params);
 
-      console.log('data', response)
-
       setArticles(response.data.data);
       setPaginationMeta(response.data);
       setCurrentPage(response.data.current_page);

@@ -29,7 +29,7 @@
     "tsBuildInfoFile": "./node_modules/.tsbuildinfo",
 
     /* Node.js specific types for build tools (e.g., vite.config.ts) */
-    "types": ["node"],
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom"],
     "allowSyntheticDefaultImports": true,
     "composite": true
   },
