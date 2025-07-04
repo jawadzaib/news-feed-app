@@ -62,9 +62,13 @@ class UserPreferencesController extends Controller
             ]
         );
 
-        // remove feed cache after preferences are updated
-        Cache::forget('user_feed_' . $user->id . '_' . md5(json_encode($request->all())));
-        Cache::forget('user_feed_' . $user->id . '_default_' . md5(json_encode($request->all())));
+        // Increment feed cache version after preferences are updated
+        $versionKey = 'user_feed_version_' . $user->id;
+        $version = Cache::increment($versionKey);
+        if (!$version) {
+            // If not set, set expiry to 1 day
+            Cache::put($versionKey, 1, 60 * 60 * 24);
+        }
 
         return response()->json([
             'message' => 'Preferences saved successfully.',
@@ -83,13 +87,17 @@ class UserPreferencesController extends Controller
         $user = Auth::user();
         $preferences = $user->preference;
 
-        // Generate a unique cache key for the user's feed
-        $cacheKey = 'user_feed_' . $user->id . '_' . md5(json_encode($request->all()));
+        // initialize feed cache version
+        $versionKey = 'user_feed_version_' . $user->id;
+        $version = Cache::get($versionKey, 1);
+
+        // Generate a unique cache key
+        $cacheKey = 'user_feed_' . $user->id . '_v' . $version . '_' . md5(json_encode($request->all()));
 
         // If no preferences are set, return latest articles
         if (!$preferences || (empty($preferences->preferred_sources) && empty($preferences->preferred_categories) && empty($preferences->preferred_authors))) {
             // Use a different cache key for the default feed
-            $defaultCacheKey = 'user_feed_' . $user->id . '_default_' . md5(json_encode($request->all()));
+            $defaultCacheKey = 'user_feed_' . $user->id . '_default_v' . $version . '_' . md5(json_encode($request->all()));
             $articles = Cache::remember($defaultCacheKey, 60 * 60, function () use ($request) {
                 return Article::with(['source', 'category'])
                     ->orderBy('published_at', 'desc')

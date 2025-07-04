@@ -9,7 +9,7 @@ interface PreferencesPanelProps {
   onPreferencesSaved: () => void;
 }
 
-const PreferencesPanel: React.FC<PreferencesPanelProps> = ({
+const PreferencesPanel: React.FC<PreferencesPanelProps> = React.memo(({
   isOpen,
   onClose,
   onPreferencesSaved,
@@ -36,7 +36,6 @@ const PreferencesPanel: React.FC<PreferencesPanelProps> = ({
   const hasUnsavedChanges = React.useMemo(() => {
     if (!userPreferences || !initialUserPreferences) return false;
 
-    console.log({ userPreferences });
 
     // Deep comparison of preference arrays
     const areSourcesEqual =
@@ -299,6 +298,6 @@ const PreferencesPanel: React.FC<PreferencesPanelProps> = ({
       </div>
     </div>
   );
-};
+});
 
 export default PreferencesPanel;
