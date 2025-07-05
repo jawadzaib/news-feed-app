@@ -16,8 +16,8 @@ use App\Http\Controllers\UserPreferencesController;
 |
 */
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:auth');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:auth');
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -25,16 +25,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
 
     // Article Search & Filtering
-    Route::get('/articles', [ArticlesController::class, 'index']);
+    Route::get('/articles', [ArticlesController::class, 'index'])->middleware('throttle:articles-feed');
 
     // User Preferences
     Route::get('/preferences', [UserPreferencesController::class, 'show']);
     Route::post('/preferences', [UserPreferencesController::class, 'store']);
-    Route::get('/feed', [UserPreferencesController::class, 'feed']);
+    Route::get('/feed', [UserPreferencesController::class, 'feed'])->middleware('throttle:articles-feed');
 
     // endpoints for preferences (sources, categories, authors)
-    Route::get('/sources', [UserPreferencesController::class, 'getSources']);
-    Route::get('/categories', [UserPreferencesController::class, 'getCategories']);
-    Route::get('/authors', [UserPreferencesController::class, 'getAuthors']);
+    Route::get('/sources', [UserPreferencesController::class, 'getSources'])->middleware('throttle:metadata');
+    Route::get('/categories', [UserPreferencesController::class, 'getCategories'])->middleware('throttle:metadata');
+    Route::get('/authors', [UserPreferencesController::class, 'getAuthors'])->middleware('throttle:metadata');
 });
-

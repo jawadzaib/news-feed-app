@@ -16,6 +16,8 @@ This is a full-stack news feed application built with **Laravel (PHP)** for the 
 
 - **Caching:** Implemented for improved performance on frequently accessed data.
 
+- **API Rate Limiting:** Comprehensive rate limiting to prevent abuse and ensure fair usage.
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -179,6 +181,18 @@ Once scrapping job is finished, cache can be cleared to see results on frontend:
 ```bash
 docker compose exec app php artisan optimize:clear
 ```
+
+## API Rate Limiting
+
+The application implements rate limiting to prevent abuse:
+
+| Endpoint                                                      | Rate Limit         |
+| ------------------------------------------------------------- | ------------------ |
+| `POST /api/register`, `POST /api/login`                       | 5 requests/minute  |
+| `GET /api/articles`, `GET /api/feed`                          | 30 requests/minute |
+| `GET /api/sources`, `GET /api/categories`, `GET /api/authors` | 20 requests/minute |
+
+When rate limit is exceeded, the API returns a `429 Too Many Requests` response.
 
 ## Testing
 
